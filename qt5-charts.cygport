@@ -1,0 +1,46 @@
+inherit qt5-qmake
+
+NAME="qt5-charts"
+VERSION=5.9.2
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Qt C++ application framework (Charts API)"
+DESCRIPTION="Qt is a cross-platform application framework for desktop and
+embedded development. Qt enables programmers to create advanced GUI
+applications once and deploy them to Windows, Mac OS X and Linux without
+rewriting the source code. Companies using Qt can leverage software
+investments made on one platform across many others."
+HOMEPAGE="https://www.qt.io/"
+SRC_URI="http://download.qt.io/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtcharts-opensource-src-${VERSION}.tar.xz"
+SRC_DIR="qtcharts-opensource-src-${VERSION}"
+
+PKG_NAMES="libQt5Charts5 libQt5Charts-devel ${NAME}-doc ${NAME}-examples"
+libQt5Charts5_CONTENTS="
+	usr/bin/cygQt5Charts-5.dll
+	usr/lib/qt5/qml/QtCharts/
+	usr/share/doc/${NAME}
+"
+libQt5Charts_devel_CONTENTS="
+	usr/include/qt5/QtCharts/
+	usr/lib/cmake/Qt5Charts/
+	usr/lib/libQt5Charts.*
+	usr/lib/pkgconfig/Qt5Charts.pc
+	usr/lib/qt5/mkspecs/modules/qt_lib_charts.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_charts_private.pri
+"
+qt5_charts_doc_CATEGORY="Doc"
+qt5_charts_doc_CONTENTS="usr/share/qt5/doc/qtcharts*"
+qt5_charts_examples_CATEGORY="X11"
+qt5_charts_examples_CONTENTS="usr/lib/qt5/examples/charts/"
+
+src_compile() {
+	cd ${B}
+	cygqmake5 ${S}
+	cygmake
+	cygmake docs
+}
+
+src_install() {
+	cd ${B}
+	qt5_qmake_install install_docs
+}
